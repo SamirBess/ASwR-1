@@ -12,8 +12,4 @@ module load R
 echo "loaded R"
 
 
-for i in {1..5}
-  do
-    echo "128 and 16 and 16 and 1"   
-    time Rscript EX4.R 128 32 32 
-  done
+time Rscript EX4.R 128 16 16 
