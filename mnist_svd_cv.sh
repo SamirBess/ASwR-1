@@ -13,4 +13,4 @@ echo "loaded R"
 
 ## --args blas fork
 #time Rscript mnist_svd_cv.R --args 4 32
-time mpirun -np 4 Rscript mnist_svd_cv.R --args 1 1
+time mpirun -np 2 Rscript mnist_svd_cv.R --args 1 1
