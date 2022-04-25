@@ -151,12 +151,17 @@ dev.off()
 ## End CV
 
 ## recompute with optimal pct
-if(my.rank == 0) { models = svdmod(train, train_lab, pct = 85)
-pdf("BasisImages.pdf")
-model_report(models, kplot = 9)
-dev.off()
-predicts = predict_svdmod(test, models)
-correct <- sum(predicts == test_lab)
-cat("Proportion Correct:", correct/nrow(test), "\n")}
+if(my.rank == 0) {
+  msg = paste0("Hello World! My name is Empi", my_rank,
+               ". We are ", ranks, " identical siblings.")
+  cat(msg, "\n")
+  models = svdmod(train, train_lab, pct = 85)
+  pdf("BasisImages.pdf")
+  model_report(models, kplot = 9)
+  dev.off()
+  predicts = predict_svdmod(test, models)
+  correct <- sum(predicts == test_lab)
+  cat("Proportion Correct:", correct/nrow(test), "\n")
+}
 
 finalize()
