@@ -84,9 +84,10 @@ image_ggplot = function(images, ivals, title) {
 #' 
 model_report = function(models, kplot = 0) {
   for(m in names(models)) {
+    mk = min(kplot, models[[m]]$k)
     cat("Model", m, ": size ", models[[m]]$k, " var captured ", 
         models[[m]]$pct, " %\n", sep = "") 
-    if(kplot) image_ggplot(models[[m]]$vt, 1:kplot, paste("Digit", m))
+    if(kplot) image_ggplot(models[[m]]$vt, 1:mk, paste("Digit", m))
   }
 }
 
