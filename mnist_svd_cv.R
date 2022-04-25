@@ -88,6 +88,8 @@ model_report = function(models, kplot = 0) {
 
 library(parallel)
 library(ggplot2)
+suppressMessages(library(pbdIO))
+suppressMessages(library(pbdMPI))
 source("../mnist/mnist_read.R")
 source("../code/flexiblas_setup.r")
 blas_threads = as.numeric(commandArgs(TRUE)[2])
@@ -101,6 +103,7 @@ nfolds = 10
 pars = seq(80.0, 95, .2)      ## par values to fit
 folds = sample( rep_len(1:nfolds, nrow(train)), nrow(train) ) ## random folds
 cv = expand.grid(par = pars, fold = 1:nfolds)  ## all combinations
+my_index = comm.chunk(nrow(cv), form = 'vector')
 
 ## function for parameter combination i
 fold_err = function(i, cv, folds, train) {
@@ -112,11 +115,18 @@ fold_err = function(i, cv, folds, train) {
 }
 
 ## apply fold_err() over parameter combinations
-cv_err = mclapply(1:nrow(cv), fold_err, cv = cv, folds = folds, train = train,
-                  mc.cores = fork_cores)
+#cv_err = mclapply(1:nrow(cv), fold_err, cv = cv, folds = folds, train = train,
+#                  mc.cores = fork_cores)
+
+comm.cat('running on indexes:', my_index,'Calling function...')
+my_cv_err = fold_err(my_index,cv,folds,train)
+comm.cat('Function call succesful')
+cv_err = allgather(my_cv_err)
+
 
 ## sum fold errors for each parameter value
 cv_err_par = tapply(unlist(cv_err), cv[, "par"], sum)
+comm.print(cv_err_par)
 
 ## plot cv curve with loess smoothing (ggplot default)
 pdf("Crossvalidation.pdf")
