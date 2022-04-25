@@ -1,0 +1,6 @@
+We ran the code on 32 MPI ranks, every rank was further parallelized via mclapply on 4 cores (see the R code).
+
+The results suggest that the optimal percentage of explained variable is around 85%. 
+For this model, the error rate is roughly 6%. 
+
+Our implementation of the optimization task took around 2 mins, which is a notable improvment over the mclapply cross validation, which takes around 10 mins.
