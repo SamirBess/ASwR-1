@@ -5,7 +5,7 @@
 #PBS -e hw.e
 #PBS -o hw.o
 
-cd ~/KPMS-IT4I-EX/mpi
+cd ~/ASwR
 pwd
 
 ## module names can vary on different platforms
