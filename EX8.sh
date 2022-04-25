@@ -2,8 +2,8 @@
 #PBS -N mnist_rf
 #PBS -l select=2:mpiprocs=128,walltime=00:50:00
 #PBS -q qexp
-#PBS -e mnist_rf.e
-#PBS -o mnist_rf.o
+#PBS -e mpi_mnist.e
+#PBS -o mpi_mnist.o
 
 cd ~/ASwR
 
