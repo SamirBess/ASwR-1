@@ -128,24 +128,26 @@ fold_err = function(i, cv, folds, train) {
 }
 
 ## apply fold_err() over parameter combinations
-comm.print(my_index)
 
 
-comm.print("pred lapply",my.rank,all.rank = TRUE)
-my_cv_err = mclapply(my_index,fold_err, cv = cv, folds = folds, train = train,mc.cores=4)
-comm.print("za lapply",my.rank,all.rank = TRUE)
-
-
-cv_err = allgather(my_cv_err) 
-cv_err_par = tapply(unlist(cv_err), cv[, "par"], sum)
-
-comm.print(cv_err_par)
-
-pdf("Crossvalidation.pdf")
-ggplot(data.frame(pct = pars, error = cv_err_par/nrow(train)), 
-       aes(pct, error)) + geom_point() + geom_smooth() +
-  labs(title = "Loess smooth with 95% CI of crossvalidation")
-dev.off()
+# comm.print(my_index)
+# 
+# 
+# comm.print("pred lapply",my.rank,all.rank = TRUE)
+# my_cv_err = mclapply(my_index,fold_err, cv = cv, folds = folds, train = train,mc.cores=4)
+# comm.print("za lapply",my.rank,all.rank = TRUE)
+# 
+# 
+# cv_err = allgather(my_cv_err)
+# cv_err_par = tapply(unlist(cv_err), cv[, "par"], sum)
+# 
+# comm.print(cv_err_par)
+# 
+# pdf("Crossvalidation.pdf")
+# ggplot(data.frame(pct = pars, error = cv_err_par/nrow(train)),
+#        aes(pct, error)) + geom_point() + geom_smooth() +
+#   labs(title = "Loess smooth with 95% CI of crossvalidation")
+# dev.off()
 
 
 ## End CV
