@@ -12,4 +12,5 @@ module load R
 echo "loaded R"
 
 ## --args blas fork
-time Rscript mnist_svd_cv.R --args 4 32
+#time Rscript mnist_svd_cv.R --args 4 32
+time mpirun -np 8 Rscript mnist_svd_cv.R --args 4 32
