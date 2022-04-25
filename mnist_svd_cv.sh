@@ -5,7 +5,7 @@
 #PBS -e mnist_svd_cv.e
 #PBS -o mnist_svd_cv.o
 
-cd ~/KPMS-IT4I-EX/mpi
+cd ~/ASwR
 pwd
 
 module load R
@@ -13,4 +13,4 @@ echo "loaded R"
 
 ## --args blas fork
 #time Rscript mnist_svd_cv.R --args 4 32
-time mpirun -np 8 Rscript mnist_svd_cv.R --args 4 32
+time mpirun -np 8 Rscript mnist_svd_cv.R --args 4 4
