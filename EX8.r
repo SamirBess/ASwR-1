@@ -152,7 +152,7 @@ dev.off()
 
 ## recompute with optimal pct
 if(my.rank == 0) {
-  msg = paste0("Hello World! My name is Empi", my_rank,
+  msg = paste0("Hello World! My name is Empi", my.rank,
                ". We are ", ranks, " identical siblings.")
   cat(msg, "\n")
   models = svdmod(train, train_lab, pct = 85)
