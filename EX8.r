@@ -100,23 +100,24 @@ library(ggplot2)
 
 
 
-## Begin CV (This CV is with mclapply. Exercise 8 needs MPI parallelization.)
-## set up cv parameters
 
+
+#=========================#
+#===MPI parallelization===#
+#=========================#
 
 nfolds = 10
-pars = seq(85, 95, 0.2) ## par values to fit
+pars = seq(85, 95, 0.2) 
 
-
-my.rank <- comm.rank()
-
-
+my_rank = comm.rank()
+ranks = comm.size()
 
 folds = sample( rep_len(1:nfolds, nrow(train)), nrow(train) ) ## random folds
 cv = expand.grid(par = pars, fold = 1:nfolds)  ## all combinations
+
 my_index = comm.chunk(nrow(cv), form = "vector")
 
-ranks = comm.size()
+
 
 
 ## function for parameter combination i
@@ -128,22 +129,19 @@ fold_err = function(i, cv, folds, train) {
   sum(predicts != train_lab[fold])
 }
 
-## apply fold_err() over parameter combinations
 
 
-comm.print(my_index)
 
+#===results by MPI parallelization, every rank is further parallelized via mclapply  on 4 cores===#
 
-comm.print("pred lapply",my.rank,all.rank = TRUE)
 my_cv_err = mclapply(my_index,fold_err, cv = cv, folds = folds, train = train,mc.cores=4)
-comm.print("za lapply",my.rank,all.rank = TRUE)
-
 
 cv_err = allgather(my_cv_err)
 cv_err_par = tapply(unlist(cv_err), cv[, "par"], sum)
 
-comm.print(cv_err_par)
 
+
+#===plot of errors===#
 pdf("Crossvalidation.pdf")
 ggplot(data.frame(pct = pars, error = cv_err_par/nrow(train)),
        aes(pct, error)) + geom_point() + geom_smooth() +
@@ -151,10 +149,10 @@ ggplot(data.frame(pct = pars, error = cv_err_par/nrow(train)),
 dev.off()
 
 
-## End CV
 
-## recompute with optimal pct
-if(my.rank == 0) {
+
+# ==results for optimal pct ==#
+if(my_rank == 0) {
   p = 85
   msg = paste0("Results for optimal model with pct:",p)
   cat(msg, "\n")
